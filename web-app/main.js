@@ -31,19 +31,19 @@ const redraw_walking_board = function () {
         tile_div.append(food_image);
 
         if (game.player_pointers[0] === index) {
-            const chicken = document.createElement("div");
-            chicken.className = "player_marker player1";
-            chicken.textContent = "🟦1";
+            const player1 = document.createElement("div");
+            player1.className = "player_marker player1";
+            player1.textContent = "🟦1";
 
-            tile_div.append(chicken);
+            tile_div.append(player1);
         }
 
         if (game.player_pointers[1] === index) {
-            const chicken = document.createElement("div");
-            chicken.className = "player_marker player2";
-            chicken.textContent = "🟥2";
+            const player2 = document.createElement("div");
+            player2.className = "player_marker player2";
+            player2.textContent = "🟥2";
 
-            tile_div.append(chicken);
+            tile_div.append(player2);
         }
 
         let x;
