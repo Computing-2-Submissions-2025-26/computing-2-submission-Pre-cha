@@ -57,6 +57,7 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 80px);
     gap: 20px;
+    top: -100px;
 }
 
 .matching_tile {
@@ -89,4 +90,16 @@ main {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+}
+
+.walking_tile img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+}
+
+.matching_tile img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
 }

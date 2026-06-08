@@ -12,9 +12,18 @@ const Memory = Object.create(null);
  * @type {string[]}
  */
 const wordlist = [
-    "a", "b", "c", "d",
-    "e", "f", "g", "h",
-    "i", "j", "k", "l"
+    "Cheese",
+    "Cookie",
+    "Crossiant_",
+    "Cupcake",
+    "Donut",
+    "Grape",
+    "Macaron",
+    "Pie",
+    "Sandwich_",
+    "Tomatoe",
+    "Waffle",
+    "Watermelon"
 ];
 
 /**
