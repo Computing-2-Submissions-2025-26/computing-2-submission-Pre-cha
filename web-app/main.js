@@ -11,6 +11,7 @@ const matching_board = el("matching-board");
 const walking_board = el("walking-board");
 const message = el("message");
 const current_turn = el("current_turn");
+const reset_button = el("reset")
 
 const redraw_walking_board = function () {
     walking_board.innerHTML = "";
@@ -32,7 +33,7 @@ const redraw_walking_board = function () {
         if (game.player_pointers[0] === index) {
             const chicken = document.createElement("div");
             chicken.className = "player_marker player1";
-            chicken.textContent = "🐔1";
+            chicken.textContent = "🟦1";
 
             tile_div.append(chicken);
         }
@@ -40,7 +41,7 @@ const redraw_walking_board = function () {
         if (game.player_pointers[1] === index) {
             const chicken = document.createElement("div");
             chicken.className = "player_marker player2";
-            chicken.textContent = "🐔2";
+            chicken.textContent = "🟥2";
 
             tile_div.append(chicken);
         }
@@ -75,8 +76,7 @@ const redraw_sidebar = function () {
 };
 
 const draw_matching_board = function () {
-    console.log("drawing board");
-
+    matching_board.innerHTML = "";
     game.matching_tiles.flat().forEach(function (tile, index) {
         const tile_button = document.createElement("button");
 
@@ -138,8 +138,8 @@ const draw_matching_board = function () {
                     )
                 ) {
                     console.log("Player", game.current_player + 1, "WIN");
-                    game = Memory.reset_game();
-                    
+                    message.textContent = "Player " + (game.current_player + 1) + " Won!";
+
                 }
             } else {
                 console.log("Not Match");
@@ -165,6 +165,14 @@ const draw_matching_board = function () {
         matching_board.append(tile_button);
     });
 };
+
+reset_button.onclick = function () {
+    game = Memory.reset_game();
+    message.textContent = "";
+    redraw_walking_board();
+    draw_matching_board();
+    redraw_sidebar();
+}
 
 
 redraw_walking_board();
