@@ -39,7 +39,7 @@ Memory.create_game = function () {
         matching_tiles: Memory.matching_tile_array(wordlist),
         walking_tiles: Memory.walking_tile_array(wordlist),
         current_player: 0,
-        player_pointers: [0, 12]
+        player_pointers: [0, 2]
     };
 };
 

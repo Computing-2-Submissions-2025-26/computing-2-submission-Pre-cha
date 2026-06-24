@@ -13,12 +13,46 @@ const message = el("message");
 const current_turn = el("current_turn");
 const reset_button = el("reset");
 const current_player_drawing = el("current_player_drawing");
+const background_music = el("background_music");
 
+const winner_popup = el("winner_popup");
+const winner_text = el("winner_text");
+const winner_close = el("winner_close");
+
+//Communication with stats
 const blue_streak = el("blue_streak");
 const red_streak = el("red_streak");
 const player1_wins = el("player1_wins");
 const player2_wins = el("player2_wins");
 
+
+let music_started = false;
+//Play the background Music
+document.body.onclick = function () {
+    if (!music_started) {
+        background_music.volume = 0.5;
+
+        background_music.play().then(function () {
+            music_started = true;
+            console.log("Music started");
+        }).catch(function (error) {
+            console.log("Music error:", error);
+        });
+    }
+};
+
+const show_winner_popup = function (player) {
+    winner_text.textContent = "Player " + player + " Won!";
+    winner_popup.className = "";
+};
+
+winner_close.onclick = function () {
+    winner_popup.className = "hidden";
+};
+
+
+
+//Redraw game statistics
 const redraw_stats = function () {
     blue_streak.textContent =
         "Blue streak: " + stats.blue_streak;
@@ -152,11 +186,11 @@ const draw_matching_board = function () {
 
             if (result.matched) {
                 redraw_walking_board();
+                redraw_sidebar();
 
                 if (result.won) {
-                    message.textContent =
-                        "Player " + (game.current_player + 1) + " Won!";
-                    game_over = true;
+                show_winner_popup(game.current_player + 1);
+                game_over = true;
                 }
             } else {
                 redraw_sidebar();

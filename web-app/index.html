@@ -7,40 +7,55 @@
     <link rel="icon" href="./assets/favicon.png"> <!-- Import 'Favorites Icon' – favicon.png -->
     <script type="module" src="main.js"></script> <!-- Load the main script. Must be type="module". Have only one of these -->
 </head>
-
 <body>
-    <aside id= "sidebar">
+    <aside id="sidebar">
         <h1>Pinic Panic</h1>
         <h2>Instructions:</h2>
-        <p>Find the matching tile in front of you
+        <p>
+            Find the matching tile in front of you
             to move forward. Overtake the other
             player to win! You're moving
             clockwise around the board.
             Peer Review: Go find a friend
             to play this with please.
         </p>
+
         <h3>Current Turn</h3>
-            <p id = "current_turn"></p>
-            <h4>Stats</h4>
-            <p id="blue_streak"></p>
-            <p id="red_streak"></p>
-            <p id="player1_wins"></p>
-            <p id="player2_wins"></p>
-            <img id="current_player_drawing" src="./assets/bluegirl.png" alt=""Current player">
-            <p id = "looking_for"></p>
-    
-        
+        <p id="current_turn"></p>
+
+        <h4>Stats</h4>
+        <p id="blue_streak"></p>
+        <p id="red_streak"></p>
+        <p id="player1_wins"></p>
+        <p id="player2_wins"></p>
+
+        <img
+            id="current_player_drawing"
+            src="./assets/blue_girl.png"
+            alt="Current player"
+        >
+
+        <p id="looking_for"></p>
     </aside>
 
     <main>
-        <div id= "game-area">
-            <div id = "walking-board"></div>
-            <section id = "centre-board">
-                <div id = "matching-board"></div>
-                <button id = "reset">Reset</button>
-                <p id = "message"></p>
+        <div id="game-area">
+            <div id="walking-board"></div>
+            <section id="centre-board">
+                <div id="matching-board"></div>
+                <button id="reset">Reset</button>
+                <p id="message"></p>
             </section>
         </div>
     </main>
+
+    <audio id="background_music" src="./assets/bg_music.mp3" loop></audio>
+
+    <div id="winner_popup" class="hidden">
+        <div id="winner_box">
+            <p id="winner_text"></p>
+            <button id="winner_close">OK</button>
+        </div>
+    </div>
 </body>
 </html>

@@ -61,6 +61,35 @@ body {
     top: -100px;
 }
 
+#reset {
+    position: absolute;
+    left: 0;
+    bottom: 0px;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    padding: 10px 28px;
+    border: 4px solid black;
+    border-radius: 14px;
+
+    background: #ffd966;
+    color: black;
+    cursor: pointer;
+
+    box-shadow: 0 5px 0 black;
+}
+
+#reset:hover {
+    background: #ffbf47;
+    transform: translateY(-2px);
+}
+
+#reset:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 black;
+}
+
 .matching_tile {
     width: 90px;
     height: 90px;
@@ -131,4 +160,49 @@ main {
     object-fit: contain;
     display: block;
     margin-top: 15px;
+}
+
+.hidden {
+    display: none;
+}
+
+#winner_popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 100;
+}
+
+#winner_popup.hidden {
+    display: none;
+}
+
+#winner_box {
+    background: #ffd966;
+    border: 5px solid black;
+    border-radius: 18px;
+    padding: 30px 45px;
+    text-align: center;
+    box-shadow: 0 8px 0 black;
+}
+
+#winner_text {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0 0 20px;
+}
+
+#winner_close {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 8px 26px;
+    border: 4px solid black;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
 }
