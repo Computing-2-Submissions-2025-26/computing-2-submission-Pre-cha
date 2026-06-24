@@ -31,6 +31,7 @@ body {
     height: 120px;
     background: white;
     border: 4px solid black;
+    border-radius: 8px;
 
     display: flex;
     justify-content: center;
@@ -66,13 +67,17 @@ body {
 
     background: royalblue;
     border: 4px solid black;
+    border-radius: 12px;
 
     font-size: 36px;
     font-weight: bold;
     cursor: pointer;
+
+    transition: background 0.2s, transform 0.2s;
 }
 
 .matching_tile:hover {
+    background: #ffd966;
     transform: scale(1.05);
 }
 
@@ -106,4 +111,24 @@ main {
     width: 90%;
     height: 90%;
     object-fit: contain;
+}
+
+.walking_tile.player1_forward {
+    outline: 6px solid #2f80ed;
+    box-shadow: 0 0 20px #2f80ed;
+    z-index: 5;
+}
+
+.walking_tile.player2_forward {
+    outline: 6px solid #eb5757;
+    box-shadow: 0 0 20px #eb5757;
+    z-index: 5;
+}
+
+#current_player_drawing {
+    width: 200px;
+    height: 400px;
+    object-fit: contain;
+    display: block;
+    margin-top: 15px;
 }

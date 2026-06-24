@@ -45,6 +45,7 @@ I'll run the same commands when I download your repos.
   - [ ] `index.html`
   - [ ] `default.css`
   - [ ] `main.js`
+  - [ ] `Memory.js`
   - [ ] Any other files you need to include.
 
 ### Finally
