@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Global - Documentation</title>
+    <title>Stats - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -35,7 +35,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">Stats</h1>
     
 
     
@@ -49,7 +49,7 @@
     
         <h2>
         
-            
+            Namespace
         
         </h2>
         
@@ -62,9 +62,33 @@
         
             
 
+
+    
+
+    <h4 class="name" id="Stats">Stats</h4>
+
+    
+
+
+
+
 <dl class="details">
     
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Stats.js is a module to keep track of the score of &quot;Picnic Panic&quot;.
+It contains each player's correct streak and number of wins.</p></li></ul></dd>
+    
 
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Stats.js.html">Stats.js</a>, <a href="Stats.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>2026</li></ul></dd>
     
 
     
@@ -82,7 +106,12 @@
     
 
     
-
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Preme Chaisen</li>
+        </ul>
+    </dd>
     
 
     
@@ -101,9 +130,32 @@
 
 
 
-            
 
-            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
         </div>
     
@@ -121,12 +173,18 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
-<h4 class="name" id="wordlist"><span class="type-signature type-signature-constant">(constant) </span>wordlist<span class="type-signature"> :Array.&lt;string></span></h4>
 
+    
+
+    <h4 class="name" id=".create_stats"><span class="type-signature type-signature-static">(static) </span>create_stats<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
 
 
 
@@ -134,13 +192,13 @@
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li><p>List of unique tile titles used to create the game board.</p></li></ul></dd>
+    <dd class="tag-description"><ul class="dummy"><li><p>Creates a new stats object.</p></li></ul></dd>
     
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Memory.js.html">Memory.js</a>, <a href="Memory.js.html#line34">line 34</a>
+        <a href="Stats.js.html">Stats.js</a>, <a href="Stats.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -179,40 +237,62 @@
 
 
 
-<div class="description usertext">
-    <p>List of unique tile titles used to create the game board.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Initial stats.</p>
 </div>
 
 
 
-    <h5 class="h5-types">Type:</h5>
-    <ul>
-        <li>
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
             
-<span class="param-type">Array.&lt;string></span>
-
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-    
 
     
 
+    <h4 class="name" id=".reset_all_streaks"><span class="type-signature type-signature-static">(static) </span>reset_all_streaks<span class="signature">(stats)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
     
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-<h4 class="name" id="Game">Game</h4>
-
 
 
 
@@ -220,13 +300,13 @@
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li><p>A complete state of a Picnic Panic game.</p></li></ul></dd>
+    <dd class="tag-description"><ul class="dummy"><li><p>Resets both players' streaks without resetting win counts.</p></li></ul></dd>
     
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Memory.js.html">Memory.js</a>, <a href="Memory.js.html#line11">line 11</a>
+        <a href="Stats.js.html">Stats.js</a>, <a href="Stats.js.html#line88">line 88</a>
     </li></ul></dd>
     
 
@@ -263,11 +343,20 @@
 
 
 
-    <h5 class="subsection-title">Properties:</h5>
 
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -289,13 +378,13 @@
 
         <tr>
             
-                <td class="name"><code>matching_tiles</code></td>
+                <td class="name"><code>stats</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;Array.&lt;string>></span>
+<span class="param-type">Object</span>
 
 
 
@@ -306,20 +395,154 @@
 
             
 
-            <td class="description last"><p>The 3 by 4 matching board.</p></td>
+            <td class="description last"><p>Current stats.</p></td>
         </tr>
 
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Updated stats.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".reset_streak"><span class="type-signature type-signature-static">(static) </span>reset_streak<span class="signature">(stats, current_player)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Resets a player's streak.</p></li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Stats.js.html">Stats.js</a>, <a href="Stats.js.html#line71">line 71</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>walking_tiles</code></td>
+                <td class="name"><code>stats</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;string></span>
+<span class="param-type">Object</span>
 
 
 
@@ -330,7 +553,7 @@
 
             
 
-            <td class="description last"><p>The 24-tile walking track.</p></td>
+            <td class="description last"><p>Current stats.</p></td>
         </tr>
 
     
@@ -354,79 +577,7 @@
 
             
 
-            <td class="description last"><p>The current player, either 0 or 1.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>player_pointers</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;number></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The current positions of both players.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>starting_pointers</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;number></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Starting positions of both players.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>player_steps</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;number></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The total steps taken by both players.</p></td>
+            <td class="description last"><p>Index of the player whose streak resets.</p></td>
         </tr>
 
     
@@ -438,32 +589,50 @@
 
 
 
-<div class="description usertext">
-    <p>A complete state of a Picnic Panic game.</p>
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Updated stats.</p>
 </div>
 
 
 
-    <h5 class="h5-types">Type:</h5>
-    <ul>
-        <li>
-            
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">Object</span>
 
 
 
-        </li>
-    </ul>
+    </dd>
+</dl>
+
+    
 
 
 
-
-
-
+        
             
-                
-<h4 class="name" id="TurnResult">TurnResult</h4>
 
+    
+
+    <h4 class="name" id=".update_streak"><span class="type-signature type-signature-static">(static) </span>update_streak<span class="signature">(stats, result, current_player)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
 
 
 
@@ -471,13 +640,13 @@
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li><p>The result of playing one turn.</p></li></ul></dd>
+    <dd class="tag-description"><ul class="dummy"><li><p>Updates the current player's streak and win count after a turn.</p></li></ul></dd>
     
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Memory.js.html">Memory.js</a>, <a href="Memory.js.html#line22">line 22</a>
+        <a href="Stats.js.html">Stats.js</a>, <a href="Stats.js.html#line37">line 37</a>
     </li></ul></dd>
     
 
@@ -514,11 +683,20 @@
 
 
 
-    <h5 class="subsection-title">Properties:</h5>
 
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -540,13 +718,13 @@
 
         <tr>
             
-                <td class="name"><code>game</code></td>
+                <td class="name"><code>stats</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Game">Game</a></span>
+<span class="param-type">Object</span>
 
 
 
@@ -557,9 +735,52 @@
 
             
 
-            <td class="description last"><p>The game state after the turn.</p></td>
+            <td class="description last"><p>Current stats.</p></td>
         </tr>
 
+    
+
+        <tr>
+            
+                <td class="name"><code>result</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The result returned by Memory.play_turn.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
@@ -581,7 +802,7 @@
 
             
 
-            <td class="description last"><p>True if the picked tile matched.</p></td>
+            <td class="description last"><p>True if the player picked correctly.</p></td>
         </tr>
 
     
@@ -605,7 +826,38 @@
 
             
 
-            <td class="description last"><p>True if the turn produced a legal win.</p></td>
+            <td class="description last"><p>True if the player won the game.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>current_player</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Index of the player before the turn.</p></td>
         </tr>
 
     
@@ -617,29 +869,45 @@
 
 
 
-<div class="description usertext">
-    <p>The result of playing one turn.</p>
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Updated stats.</p>
 </div>
 
 
 
-    <h5 class="h5-types">Type:</h5>
-    <ul>
-        <li>
-            
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
 <span class="param-type">Object</span>
 
 
 
-        </li>
-    </ul>
+    </dd>
+</dl>
+
+    
 
 
 
+        
+    
 
-
-
-            
     
 
     

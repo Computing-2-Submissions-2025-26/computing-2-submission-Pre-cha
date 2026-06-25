@@ -27,10 +27,11 @@ Stats.create_stats = function () {
  * Updates the current player's streak and win count after a turn.
  * @memberof Stats
  * @function
- * @param {Object} stats - Current stats.
- * @param {boolean} result.matched - True if the player picked correctly.
- * @param {boolean} result.won - True if the player won the game.
- * @param {number} current_player - Index of the player before the turn.
+ * @param {Object} stats Current stats.
+ * @param {Object} result The result returned by Memory.play_turn.
+ * @param {boolean} result.matched True if the player picked correctly.
+ * @param {boolean} result.won True if the player won the game.
+ * @param {number} current_player Index of the player before the turn.
  * @returns {Object} Updated stats.
  */
 Stats.update_streak = function (stats, result, current_player) {
