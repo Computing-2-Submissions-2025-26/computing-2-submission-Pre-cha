@@ -11,18 +11,20 @@ const test_game = function () {
         matching_tiles: [
             ["Cheese", "Cookie", "Donut", "Pie"],
             ["Grape", "Macaron", "Waffle", "Cupcake"],
-            ["Tomatoe", "Watermelon", "Sandwich_", "Crossiant_"]
+            ["Tomato", "Watermelon", "Sandwich", "Croissant"]
         ],
         walking_tiles: [
             "Cheese", "Cookie", "Donut", "Pie",
             "Grape", "Macaron", "Waffle", "Cupcake",
-            "Tomatoe", "Watermelon", "Sandwich", "Crossiant",
+            "Tomato", "Watermelon", "Sandwich", "Croissant",
             "Cheese", "Cookie", "Donut", "Pie",
             "Grape", "Macaron", "Waffle", "Cupcake",
-            "Tomatoe", "Watermelon", "Sandwich", "Crossiant"
+            "Tomato", "Watermelon", "Sandwich", "Croissant"
         ],
         current_player: 0,
-        player_pointers: [0, 6]
+        player_pointers: [0, 3],
+        starting_pointers: [0, 3],
+        player_steps: [0, 0]
     };
 };
 
@@ -35,14 +37,16 @@ const expected_next_pointer = function (pointer, walking_tiles) {
 };
 
 /**
- * Throw if game state is not valid
+ * Throws if the game state is not valid.
  * A game is valid if:
- * matching_tile is a 3 by 4 board.
- * walking_tile is 24 tiles (2 x wordlist)
- * current_player is either 1 or 0
- * player_pointers is an array containg two valid position on walking_tiles
- * @param {Object} game - game state to check
- * @throws if game state is invalid
+ * - matching_tiles is a 3 by 4 board.
+ * - walking_tiles contains 24 tiles.
+ * - current_player is either 0 or 1.
+ * - player_pointers contains two valid walking track positions.
+ * - starting_pointers contains two valid walking track positions.
+ * - player_steps contains two non-negative step counts.
+ * @param {object} game The game state to check.
+ * @throws if the game state is invalid.
  */
 const throw_if_invalid_game = function (game) {
     if (typeof game !== "object" || game === null) {
@@ -88,14 +92,44 @@ const throw_if_invalid_game = function (game) {
             throw new Error("Player pointer is outside the walking track: " + display_game(game));
         }
     });
+
+    if (
+        !Array.isArray(game.starting_pointers) ||
+        game.starting_pointers.length !== 2
+    ) {
+        throw new Error("starting_pointers should contain two positions: " + display_game(game));
+    }
+
+    game.starting_pointers.forEach(function (pointer) {
+        if (
+            !Number.isInteger(pointer) ||
+            pointer < 0 ||
+            pointer >= game.walking_tiles.length
+        ) {
+            throw new Error("Starting pointer is outside the walking track: " + display_game(game));
+        }
+    });
+
+    if (
+        !Array.isArray(game.player_steps) ||
+        game.player_steps.length !== 2
+    ) {
+        throw new Error("player_steps should contain two step counts: " + display_game(game));
+    }
+
+    game.player_steps.forEach(function (steps) {
+        if (!Number.isInteger(steps) || steps < 0) {
+            throw new Error("player_steps should contain non-negative integers: " + display_game(game));
+        }
+    });
 };
 
 /**
- * Throws if the current player has not moved forward based on game rules
- * or if other player moves out of turn.
- * @param {object} old_game - game state before the move
- * @param {object} new_game  - game state after the move
- * @throws if the movement does not follow game rules
+ * Throws if the current player has not moved forward according to the
+ * game rules, or if the other player moves out of turn.
+ * @param {object} old_game The game state before the move.
+ * @param {object} new_game The game state after the move.
+ * @throws if the movement does not follow the game rules.
  */
 const throw_if_current_player_moved = function (old_game, new_game) {
     const current_player = old_game.current_player;
@@ -112,36 +146,55 @@ const throw_if_current_player_moved = function (old_game, new_game) {
     if (new_game.player_pointers[other_player] !== old_game.player_pointers[other_player]) {
         throw new Error("The other player should not move: " + display_game(new_game));
     }
+
+    if (new_game.player_steps[current_player] !== old_game.player_steps[current_player] + 1) {
+        throw new Error("The current player's step count should increase: " + display_game(new_game));
+    }
+
+    if (new_game.player_steps[other_player] !== old_game.player_steps[other_player]) {
+        throw new Error("The other player's step count should not change: " + display_game(new_game));
+    }
 };
 
 /**
- * Throws if either player moved.
- * Used to check if any player moves after incorrect match.
- * There should be no movement but switches turn to other person
- * @param {object} old_game - game state before the move
- * @param {object} new_game - game state after the move
- * @throws if any player pointer has changed
+ * Throws if either player's position or step count changed.
+ * This is used after an incorrect match, where no player should move.
+ * @param {object} old_game The game state before the turn.
+ * @param {object} new_game The game state after the turn.
+ * @throws if any player movement occurred.
  */
 const throw_if_any_player_moved = function (old_game, new_game) {
     if (
         new_game.player_pointers[0] !== old_game.player_pointers[0] ||
         new_game.player_pointers[1] !== old_game.player_pointers[1]
     ) {
-        throw new Error("No player should have moved: " + display_game(new_game));
+        throw new Error("No player pointer should have changed: " + display_game(new_game));
+    }
+
+    if (
+        new_game.player_steps[0] !== old_game.player_steps[0] ||
+        new_game.player_steps[1] !== old_game.player_steps[1]
+    ) {
+        throw new Error("No player step count should have changed: " + display_game(new_game));
     }
 };
 
 /**
- * Throws if the result returned by play_turn is invalid
- * A turn is valid if:
- * It is an object
- * Contains a boolean (Matched: True, Not Matched: False)
- * @param {Object} result - The result returned by play_turn (the matching stuff)
- * @throw if the results from play_turn is invalid
+ * Throws if the result returned by play_turn is invalid.
+ * A turn result is valid if it contains:
+ * - a game object,
+ * - a boolean matched value,
+ * - a boolean won value.
+ * @param {object} result The result returned by play_turn.
+ * @throws if the result from play_turn is invalid.
  */
 const throw_if_invalid_turn_result = function (result) {
     if (typeof result !== "object" || result === null) {
         throw new Error("play_turn should return an object.");
+    }
+
+    if (typeof result.game !== "object" || result.game === null) {
+        throw new Error("play_turn result should contain a game object.");
     }
 
     if (typeof result.matched !== "boolean") {
@@ -168,9 +221,33 @@ describe("Game creation", function () {
             throw new Error("The game should start with player 0: " + display_game(game));
         }
     });
+
+    it("create_game starts each player with zero steps", function () {
+        const game = Memory.create_game();
+
+        if (game.player_steps[0] !== 0 || game.player_steps[1] !== 0) {
+            throw new Error("Both players should start with zero steps: " + display_game(game));
+        }
+    });
 });
 
 describe("Player movement", function () {
+    it("get_forward_index returns the index in front of the player", function () {
+        const walking_tiles = ["A", "B", "C"];
+
+        if (Memory.get_forward_index(0, walking_tiles) !== 1) {
+            throw new Error("Forward index should move from 0 to 1.");
+        }
+    });
+
+    it("get_forward_index wraps from the last index to 0", function () {
+        const walking_tiles = ["A", "B", "C"];
+
+        if (Memory.get_forward_index(2, walking_tiles) !== 0) {
+            throw new Error("Forward index should wrap from 2 to 0.");
+        }
+    });
+
     it("update_pointer moves a pointer forward by 1", function () {
         const walking_tiles = ["A", "B", "C"];
 
@@ -321,39 +398,50 @@ describe("Turns", function () {
 });
 
 describe("Winning", function () {
-    it("win_condition returns true when the current player reaches the tile ahead of the other player", function () {
+    it("distance_to_overtake returns the number of steps needed to overtake", function () {
         const walking_tiles = ["A", "B", "C", "D"];
 
-        if (!Memory.win_condition(2, 1, walking_tiles)) {
-            throw new Error("Player should win when they reach the tile ahead of the other player.");
+        if (Memory.distance_to_overtake(0, 2, walking_tiles) !== 3) {
+            throw new Error("Player should need 3 steps to overtake from 0 to ahead of 2.");
         }
     });
 
-    it("win_condition returns false when the current player has not reached the winning tile", function () {
+    it("win_condition returns true after a legal overtake", function () {
         const walking_tiles = ["A", "B", "C", "D"];
 
-        if (Memory.win_condition(1, 2, walking_tiles)) {
-            throw new Error("Player should not win when they have not reached the tile ahead of the other player.");
+        if (!Memory.win_condition(3, 2, 3, 0, 2, walking_tiles)) {
+            throw new Error("Player should win after travelling far enough to overtake.");
+        }
+    });
+
+    it("win_condition returns false when ahead without enough travel", function () {
+        const walking_tiles = ["A", "B", "C", "D"];
+
+        if (Memory.win_condition(3, 2, 1, 0, 2, walking_tiles)) {
+            throw new Error("Player should not win without travelling far enough to overtake.");
         }
     });
 
     it("win_condition handles wrapping around the walking track", function () {
         const walking_tiles = ["A", "B", "C", "D"];
 
-        if (!Memory.win_condition(0, 3, walking_tiles)) {
-            throw new Error("Player should win when the winning tile wraps around to the start.");
+        if (!Memory.win_condition(0, 3, 4, 0, 3, walking_tiles)) {
+            throw new Error("Player should win when the overtake wraps around the start.");
         }
     });
 
-    it("check_player_won returns true for a winning game state", function () {
+    it("check_player_won returns true for a legal winning game state", function () {
         const game = test_game();
-        game.player_pointers = [7, 6];
+
+        game.player_pointers = [4, 3];
+        game.starting_pointers = [0, 3];
+        game.player_steps = [4, 0];
         game.current_player = 0;
 
         throw_if_invalid_game(game);
 
         if (!Memory.check_player_won(game)) {
-            throw new Error("Player 0 should be detected as winning.");
+            throw new Error("Player 0 should be detected as legally winning.");
         }
     });
 
@@ -369,25 +457,47 @@ describe("Winning", function () {
 
     it("check_player_won checks the current player, not always player 0", function () {
         const game = test_game();
+
         game.current_player = 1;
         game.player_pointers = [0, 1];
+        game.starting_pointers = [0, 3];
+        game.player_steps = [0, 22];
 
         throw_if_invalid_game(game);
 
         if (!Memory.check_player_won(game)) {
-            throw new Error("Player 1 should be detected as winning.");
+            throw new Error("Player 1 should be detected as legally winning.");
+        }
+    });
+
+    it("play_turn returns won true after a legal overtake", function () {
+        const game = test_game();
+
+        game.player_pointers = [3, 3];
+        game.starting_pointers = [0, 3];
+        game.player_steps = [3, 0];
+        game.current_player = 0;
+
+        const result = Memory.play_turn(game, 4);
+
+        throw_if_invalid_turn_result(result);
+
+        if (!result.won) {
+            throw new Error("play_turn should return won true after a legal overtake.");
         }
     });
 
     it(
-        "play_turn does not let a player win after starting on the same tile",
+        "play_turn does not allow an unfair win after both players share a tile",
         function () {
             const game = test_game();
 
-            game.player_pointers = [6, 6];
+            game.player_pointers = [3, 3];
+            game.starting_pointers = [0, 3];
+            game.player_steps = [1, 0];
             game.current_player = 0;
 
-            const result = Memory.play_turn(game, 7);
+            const result = Memory.play_turn(game, 4);
 
             throw_if_invalid_turn_result(result);
 
@@ -399,7 +509,7 @@ describe("Winning", function () {
 
             if (result.won) {
                 throw new Error(
-                    "Player 0 should not win after starting on the same tile as player 1."
+                    "Player 0 should not win without travelling far enough to overtake."
                 );
             }
         }

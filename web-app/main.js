@@ -203,6 +203,11 @@ const draw_matching_board = function () {
 
             const player_before_turn = game.current_player;
             const result = Memory.play_turn(game, index);
+            console.log("turn result", result);
+            console.log("pointers", result.game.player_pointers);
+            console.log("steps", result.game.player_steps);
+            console.log("starts", result.game.starting_pointers);
+            console.log("won", result.won);
             game = result.game;
             stats = Stats.update_streak(
                 stats,

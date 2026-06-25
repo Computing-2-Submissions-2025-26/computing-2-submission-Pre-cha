@@ -56,7 +56,9 @@ Memory.create_game = function () {
         matching_tiles: Memory.matching_tile_array(wordlist),
         walking_tiles: Memory.walking_tile_array(wordlist),
         current_player: 0,
-        player_pointers: [0, 12]
+        player_pointers: [0, 3],
+        starting_pointers: [0, 3],
+        player_steps: [0, 0]
     };
 };
 
@@ -121,6 +123,21 @@ const has_adjacent_duplicates = function (array) {
  */
 Memory.shuffle = function (array) {
     return R.sortBy(() => Math.random(), array);
+};
+
+/**
+ * 
+ */
+Memory.distance_to_overtake = function (
+    current_start,
+    other_start,
+    walking_tiles
+) {
+    return (
+        Memory.get_forward_index(other_start, walking_tiles) -
+        current_start +
+        walking_tiles.length
+    ) % walking_tiles.length;
 };
 
 /**
@@ -195,18 +212,29 @@ Memory.matching = function (
  * @param {number} current_player_pointer - index position of current player
  * @param {number} other_player_pointer - index position of opposing player
  * @param {string[]} walking_tiles - Shuffled array of walking_tiles
+ * @param {number} current_player_steps - how many step current player has
+ * @param {number} other_player_steps - how many step other player has
  * @returns {boolean} Returns true if game won
  */
 Memory.win_condition = function (
     current_player_pointer,
     other_player_pointer,
+    current_player_steps,
+    current_player_start,
+    other_player_start,
     walking_tiles
 ) {
-    const other_forward_pointer = (
-        other_player_pointer + 1
-    ) % walking_tiles.length;
-
-    return current_player_pointer === other_forward_pointer;
+    return (
+        current_player_pointer === Memory.get_forward_index(
+            other_player_pointer,
+            walking_tiles
+        ) &&
+        current_player_steps >= Memory.distance_to_overtake(
+            current_player_start,
+            other_player_start,
+            walking_tiles
+        )
+    );
 };
 
 /**
@@ -248,17 +276,21 @@ Memory.switch_player = function (current_player) {
 Memory.move_current_player = function (game) {
     const current_player = game.current_player;
     const player_pointers = game.player_pointers.slice();
+    const player_steps = game.player_steps.slice();
 
     player_pointers[current_player] = Memory.update_pointer(
         game.player_pointers[current_player],
         game.walking_tiles
     );
 
+    player_steps[current_player] += 1;
+
     return Object.assign(
         {},
         game,
         {
-            player_pointers: player_pointers
+            player_pointers: player_pointers,
+            player_steps: player_steps
         }
     );
 };
@@ -275,19 +307,15 @@ Memory.move_current_player = function (game) {
  * @returns {boolean} - either win (true) or not
  */
 Memory.check_player_won = function (game) {
-    const current_player_pointer = game.player_pointers[
-        game.current_player
-    ];
-
-    const other_player = Memory.switch_player(game.current_player);
-
-    const other_player_pointer = game.player_pointers[
-        other_player
-    ];
+    const current_player = game.current_player;
+    const other_player = Memory.switch_player(current_player);
 
     return Memory.win_condition(
-        current_player_pointer,
-        other_player_pointer,
+        game.player_pointers[current_player],
+        game.player_pointers[other_player],
+        game.player_steps[current_player],
+        game.starting_pointers[current_player],
+        game.starting_pointers[other_player],
         game.walking_tiles
     );
 };
@@ -329,17 +357,13 @@ Memory.play_turn = function (game, picked) {
             game.matching_tiles
         )
     ) {
-        const players_started_same_tile = current_pointer === other_pointer;
 
         const updated_game = Memory.move_current_player(game);
 
         return {
             game: updated_game,
             matched: true,
-            won: (
-                !players_started_same_tile &&
-                Memory.check_player_won(updated_game)
-            )
+            won: Memory.check_player_won(updated_game)
         };
     }
 
