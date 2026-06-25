@@ -60,6 +60,16 @@ A front-end application is written to wrap the game module in a browser based we
 `web-app/`
 This web app is designed with a pinic eating theme.
 
+### Web Application
+*Produce a web application that allows a user to interface with your game module.*
+
+- Implement in `/web-app`
+  - [ ] `index.html`
+  - [ ] `default.css`
+  - [ ] `main.js`
+  - [ ] `Memory.js`
+  - [ ] `Stats.js`
+
 ## Installation
 *Run `npm install` in the root directory to install dependencies (ramda, mocha), docdash
 
@@ -69,23 +79,7 @@ The following Artificial Intelligence tools were used for the following purposes
 I acknowledge the use of ChatGPT (OpenAI, https://chatgpt.com) to support 
 code explanation, debugging, improving code readability, and suggesting improvements to the structure and user interface of the game.
 
-I also acknowledge the use of Codex to help refine ideas for unit testing.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+I also acknowledge the use of Codex to help refine unit testing and helping keep consistent JSdoc. 
 
 
 

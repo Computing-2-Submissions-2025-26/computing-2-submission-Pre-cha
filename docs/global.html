@@ -29,7 +29,7 @@
 <nav >
     
     
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Memory.html">Memory</a><ul class='methods'><li data-type='method'><a href="Memory.html#.check_player_won">check_player_won</a></li><li data-type='method'><a href="Memory.html#.create_game">create_game</a></li><li data-type='method'><a href="Memory.html#.get_forward_tile">get_forward_tile</a></li><li data-type='method'><a href="Memory.html#.matching">matching</a></li><li data-type='method'><a href="Memory.html#.matching_tile_array">matching_tile_array</a></li><li data-type='method'><a href="Memory.html#.move_current_player">move_current_player</a></li><li data-type='method'><a href="Memory.html#.play_turn">play_turn</a></li><li data-type='method'><a href="Memory.html#.reset_game">reset_game</a></li><li data-type='method'><a href="Memory.html#.shuffle">shuffle</a></li><li data-type='method'><a href="Memory.html#.switch_player">switch_player</a></li><li data-type='method'><a href="Memory.html#.update_pointer">update_pointer</a></li><li data-type='method'><a href="Memory.html#.walking_tile_array">walking_tile_array</a></li><li data-type='method'><a href="Memory.html#.win_condition">win_condition</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#wordlist">wordlist</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Memory.html">Memory</a><ul class='methods'><li data-type='method'><a href="Memory.html#.check_player_won">check_player_won</a></li><li data-type='method'><a href="Memory.html#.create_game">create_game</a></li><li data-type='method'><a href="Memory.html#.distance_to_overtake">distance_to_overtake</a></li><li data-type='method'><a href="Memory.html#.get_forward_index">get_forward_index</a></li><li data-type='method'><a href="Memory.html#.get_forward_tile">get_forward_tile</a></li><li data-type='method'><a href="Memory.html#.matching">matching</a></li><li data-type='method'><a href="Memory.html#.matching_tile_array">matching_tile_array</a></li><li data-type='method'><a href="Memory.html#.move_current_player">move_current_player</a></li><li data-type='method'><a href="Memory.html#.play_turn">play_turn</a></li><li data-type='method'><a href="Memory.html#.reset_game">reset_game</a></li><li data-type='method'><a href="Memory.html#.shuffle">shuffle</a></li><li data-type='method'><a href="Memory.html#.switch_player">switch_player</a></li><li data-type='method'><a href="Memory.html#.update_pointer">update_pointer</a></li><li data-type='method'><a href="Memory.html#.walking_tile_array">walking_tile_array</a></li><li data-type='method'><a href="Memory.html#.win_condition">win_condition</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#Game">Game</a></li><li><a href="global.html#TurnResult">TurnResult</a></li><li><a href="global.html#wordlist">wordlist</a></li></ul>
     
 </nav>
 
@@ -140,7 +140,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Memory.js.html">Memory.js</a>, <a href="Memory.js.html#line15">line 15</a>
+        <a href="Memory.js.html">Memory.js</a>, <a href="Memory.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -207,6 +207,440 @@
     
 
     
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id="Game">Game</h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>A complete state of a Picnic Panic game.</p></li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Memory.js.html">Memory.js</a>, <a href="Memory.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>matching_tiles</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Array.&lt;string>></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The 3 by 4 matching board.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>walking_tiles</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The 24-tile walking track.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>current_player</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current player, either 0 or 1.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>player_pointers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current positions of both players.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>starting_pointers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Starting positions of both players.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>player_steps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The total steps taken by both players.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description usertext">
+    <p>A complete state of a Picnic Panic game.</p>
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="TurnResult">TurnResult</h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>The result of playing one turn.</p></li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Memory.js.html">Memory.js</a>, <a href="Memory.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>game</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Game">Game</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The game state after the turn.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>matched</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>True if the picked tile matched.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>won</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>True if the turn produced a legal win.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<div class="description usertext">
+    <p>The result of playing one turn.</p>
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+            
+    
 
     
 </article>
@@ -223,7 +657,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Jun 24 2026 23:32:39 GMT+0100 (British Summer Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Thu Jun 25 2026 06:45:54 GMT+0100 (British Summer Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

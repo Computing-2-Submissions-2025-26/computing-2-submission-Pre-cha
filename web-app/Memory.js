@@ -14,7 +14,9 @@ const Memory = Object.create(null);
  * @property {string[][]} matching_tiles The 3 by 4 matching board.
  * @property {string[]} walking_tiles The 24-tile walking track.
  * @property {number} current_player The current player, either 0 or 1.
- * @property {number[]} player_pointers The positions of both players.
+ * @property {number[]} player_pointers The current positions of both players.
+ * @property {number[]} starting_pointers Starting positions of both players.
+ * @property {number[]} player_steps The total steps taken by both players.
  */
 
 /**
@@ -56,8 +58,8 @@ Memory.create_game = function () {
         matching_tiles: Memory.matching_tile_array(wordlist),
         walking_tiles: Memory.walking_tile_array(wordlist),
         current_player: 0,
-        player_pointers: [0, 3],
-        starting_pointers: [0, 3],
+        player_pointers: [0, 12],
+        starting_pointers: [0, 12],
         player_steps: [0, 0]
     };
 };
@@ -126,7 +128,14 @@ Memory.shuffle = function (array) {
 };
 
 /**
- * 
+ * Calculates how many steps a player must take from their starting position
+ * to move one tile ahead of the other player's starting position.
+ * @memberof Memory
+ * @function
+ * @param {number} current_start The current player's starting index.
+ * @param {number} other_start The other player's starting index.
+ * @param {string[]} walking_tiles The walking track.
+ * @returns {number} The number of steps needed to legally overtake.
  */
 Memory.distance_to_overtake = function (
     current_start,
@@ -206,15 +215,18 @@ Memory.matching = function (
 };
 
 /**
- * Check whether current player has won
+ * Checks whether the current player has legally overtaken the other player.
+ * A player wins when they are one tile ahead of the other player and have
+ * taken enough steps from their starting position to make that overtake legal.
  * @memberof Memory
  * @function
- * @param {number} current_player_pointer - index position of current player
- * @param {number} other_player_pointer - index position of opposing player
- * @param {string[]} walking_tiles - Shuffled array of walking_tiles
- * @param {number} current_player_steps - how many step current player has
- * @param {number} other_player_steps - how many step other player has
- * @returns {boolean} Returns true if game won
+ * @param {number} current_player_pointer The current player's position.
+ * @param {number} other_player_pointer The other player's position.
+ * @param {number} current_player_steps The current player's total steps.
+ * @param {number} current_player_start The current player's starting position.
+ * @param {number} other_player_start The other player's starting position.
+ * @param {string[]} walking_tiles The walking track.
+ * @returns {boolean} True if the current player has legally won.
  */
 Memory.win_condition = function (
     current_player_pointer,
@@ -263,15 +275,11 @@ Memory.switch_player = function (current_player) {
 };
 
 /**
- * Move current player ahead by 1
+ * Moves the current player forward by one tile and increases their step count.
  * @memberof Memory
  * @function
- * @param {Game} game - current game state
- * @param {string[][]} game.matching_tiles - The matching tile grid.
- * @param {string[]} game.walking_tiles - The walking board tiles.
- * @param {number} game.current_player - Index of the current player.
- * @param {number[]} game.player_pointers - Current positions of both players.
- * @returns {Game} - update game to move player forward
+ * @param {Game} game The current game state.
+ * @returns {Game} The updated game state.
  */
 Memory.move_current_player = function (game) {
     const current_player = game.current_player;
@@ -296,15 +304,11 @@ Memory.move_current_player = function (game) {
 };
 
 /**
- * Checks whether the current player in the game has won
+ * Checks whether the current player has legally won in the current game state.
  * @memberof Memory
  * @function
- * @param {Game} game - current game state
- * @param {string[][]} game.matching_tiles - The matching tile grid.
- * @param {string[]} game.walking_tiles - The walking board tiles.
- * @param {number} game.current_player - Index of the current player.
- * @param {number[]} game.player_pointers - Current positions of both players.
- * @returns {boolean} - either win (true) or not
+ * @param {Game} game The current game state.
+ * @returns {boolean} True if the current player has overtaken the other player.
  */
 Memory.check_player_won = function (game) {
     const current_player = game.current_player;
@@ -321,33 +325,19 @@ Memory.check_player_won = function (game) {
 };
 
 /**
- * Play a single turn by
- * Checking if the picked matching tile matches with walking_tile ahead
- * If yes, current player moves forward and checks if they have won.
- * If no, the turn switches to other player
- * Special Case: If both players started on the same tile,
- * behind player moving forward from that tile does not count as a win.
+ * Plays one turn for the current player.
+ * If the picked matching tile matches the tile ahead of the current player,
+ * the player moves forward and the game checks for a legal overtake win.
+ * If the picked tile is wrong, the player does not move and the turn switches
+ * to the other player.
  * @memberof Memory
  * @function
- * @param {Game} game - current game state
- * @param {string[][]} game.matching_tiles - The matching tile grid.
- * @param {string[]} game.walking_tiles - The walking board tiles.
- * @param {number} game.current_player - Index of the current player.
- * @param {number[]} game.player_pointers - Current positions of both players.
- * @param {number} picked - index position of picked matching tile
- * @returns {TurnResult} Result of the turn.
- * @returns {Game} return.game - Updated game state.
- * @returns {boolean} return.matched - True if the picked tile matched
- * the forward tile.
- * @returns {boolean} return.won - True if the current player
- * won after this turn.
+ * @param {Game} game The current game state.
+ * @param {number} picked The index of the picked matching tile.
+ * @returns {TurnResult} The result of the turn.
  */
 Memory.play_turn = function (game, picked) {
     const current_pointer = game.player_pointers[game.current_player];
-
-    const other_player = Memory.switch_player(game.current_player);
-
-    const other_pointer = game.player_pointers[other_player];
 
     if (
         Memory.matching(
