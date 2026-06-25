@@ -14,7 +14,7 @@ for course work submission [Computing2:Applications]
 3) The current player’s target tile is shown on the walking board with a blinking border. Player 1’s target is highlighted in blue, and Player 2’s target is highlighted in red.
 4) If the mystery tile matches the highlighted forward tile, the current player moves one space forward. If the mystery tile does not match, the turn passes to the other player.
 5) Play continues until one player laps and overtakes the other player.
-6) After winning, to start a new round, press [reset]
+6) After winning, to start a new round, press [reset], your victory statistic should still be recorded
 
 ## RULES
 1) Player 1 and Player 2 take turns clicking the mystery tiles in the centre board.
@@ -31,22 +31,22 @@ for course work submission [Computing2:Applications]
 - Walking tiles are arranged in a circular board
 - Animation for shuffling cards
 - In-game sound affects for selection and background music
-- Winner pop-up
+- Winner pop-up appears after win
 - Player's, win and best streak tracking (Stats.js)
 - Reset Button for starting a new
 - Current turn indicator with player avatar
 
 ## FUTURE IMPROVEMENTS
-- Increase to selectable 2-4 players (Alters spacing)
+- Increase to selectable 2-4 players (by alters spacing)
 
  ## Accessibility
- Accessibility has been checked with the built-in tool on FireFox Developers
+ Accessibility has been checked with the built-in tool on FireFox Developers with 0 flagged errors
 
 It defines a module
 `web-app/Memory.js`,
 for presentiing and playing the Memory Game in pure Javascript.
 This module exposes pure functions in its
-[API]()
+[API](https://github.com/Computing-2-Submissions-2025-26/computing-2-submission-Pre-cha/blob/main/docs/Memory.html)
 that act on a game board object.
 
 It defines a module
@@ -64,11 +64,21 @@ This web app is designed with a pinic eating theme.
 *Produce a web application that allows a user to interface with your game module.*
 
 - Implement in `/web-app`
-  - [ ] `index.html`
-  - [ ] `default.css`
-  - [ ] `main.js`
-  - [ ] `Memory.js`
-  - [ ] `Stats.js`
+  - [ ] `index.html` (html)
+  - [ ] `default.css` (css)
+  - [ ] `main.js` (main program)
+  - [ ] `Memory.js` (gaming logics)
+  - [ ] `Stats.js` (statistic logics)
+
+
+### Unit Tests – Specification
+Unit test split into 4 main categories"
+- Game Creation (Testing if the game states are set up correctly)
+- Player movement (Testing if movement functions are set up correctly and applied on correct player)
+- Matching (Testing for if clicked tile matches or not matches)
+- Turns (Testing for player switching game logic. If match, continue turn. If not match, swap turns)
+- Win Conditions (Testing for legal win conditions being met, player must overtake and travel enough distance to overtake)
+
 
 ## Installation
 *Run `npm install` in the root directory to install dependencies (ramda, mocha), docdash
@@ -77,58 +87,4 @@ This web app is designed with a pinic eating theme.
 The following Artificial Intelligence tools were used for the following purposes:
 
 I acknowledge the use of ChatGPT (OpenAI, https://chatgpt.com) to support 
-code explanation, debugging, improving code readability, and suggesting improvements to the structure and user interface of the game.
-
-I also acknowledge the use of Codex to help refine unit testing and helping keep consistent JSdoc. 
-
-
-
-
-## Checklist
-### Install dependencies locally
-This template relies on a a few packages from the Node Package Manager, npm.
-To install them run the following commands in the terminal.
-```properties
-npm install
-```
-These won't be uploaded to your repository because of the `.gitignore`.
-I'll run the same commands when I download your repos.
-
-### Game Module – API
-*You will produce an API specification, i.e. a list of function names and their signatures, for a Javascript module that represents the state of your game and the operations you can perform on it that advances the game or provides information.*
-
-- [ ] Include a `.js ` module file in `/web-app` containing the API using `jsdoc`.
-- [ ] Update `/jsdoc.json` to point to this module in `.source.include` (line 7)
-- [ ] Compile jsdoc using the run configuration `Generate Docs`
-- [ ] Check the generated docs have compiled correctly.
-
-### Game Module – Implementation
-*You will implement, in Javascript, the module you specified above. Such that your game can be simulated in code, e.g. in the debug console.*
-
-- [ ] The file above should be fully implemented.
-
-### Unit Tests – Specification
-*For the Game module API you have produced, write a set of unit tests descriptions that specify the expected behaviour of one aspect of your API, e.g. you might pick the win condition, or how the state changes when a move is made.*
-
-- [ ] Write unit test definitions in `/web-app/tests`.
-- [ ] Check the headings appear in the Testing sidebar.
-
-### Unit Tests – Implementation
-*Implement in code the unit tests specified above.*
-
-- [ ] Implement the tests above.
-
-### Web Application
-*Produce a web application that allows a user to interface with your game module.*
-
-- Implement in `/web-app`
-  - [ ] `index.html`
-  - [ ] `default.css`
-  - [ ] `main.js`
-  - [ ] `Memory.js`
-  - [ ] Any other files you need to include.
-
-### Finally
-- [ ] Push to GitHub.
-- [ ] Sync the changes.
-- [ ] Check submission on GitHub website.
+code explanation, debugging, improving code readability, and suggesting improvements to the structure and user interface of the game. I also acknowledge the use of Codex to help refine unit testing and helping keep consistent JSdoc. 
