@@ -1,6 +1,6 @@
 import R from "./ramda.js";
 /**
- * Memory.js is a module to model and play "Pinic Panic"
+ * Memory.js is a module to model and play "Picnic Panic"
  * This is a memory matching game.
  *@namespace Memory
  *@author Preme Chaisen
@@ -9,20 +9,37 @@ import R from "./ramda.js";
 const Memory = Object.create(null);
 
 /**
+ * A complete state of a Picnic Panic game.
+ * @typedef {Object} Game
+ * @property {string[][]} matching_tiles The 3 by 4 matching board.
+ * @property {string[]} walking_tiles The 24-tile walking track.
+ * @property {number} current_player The current player, either 0 or 1.
+ * @property {number[]} player_pointers The positions of both players.
+ */
+
+/**
+ * The result of playing one turn.
+ * @typedef {Object} TurnResult
+ * @property {Game} game The game state after the turn.
+ * @property {boolean} matched True if the picked tile matched.
+ * @property {boolean} won True if the turn produced a legal win.
+ */
+
+/**
  * List of unique tile titles used to create the game board.
  * @type {string[]}
  */
 const wordlist = [
     "Cheese",
     "Cookie",
-    "Crossiant_",
+    "Croissant",
     "Cupcake",
     "Donut",
     "Grape",
     "Macaron",
     "Pie",
-    "Sandwich_",
-    "Tomatoe",
+    "Sandwich",
+    "Tomato",
     "Waffle",
     "Watermelon"
 ];
@@ -32,7 +49,7 @@ const wordlist = [
  * shuffled walking tiles, starting player turn, and player positions.
  * @memberof Memory
  * @function
- * @returns {Object} The initial game state.
+ * @returns {Game} The initial game state.
  */
 Memory.create_game = function () {
     return {
@@ -63,19 +80,32 @@ Memory.matching_tile_array = function (wordlist) {
  * @returns {string[]} A shuffled 24x1 list of walking_tiles
  */
 Memory.walking_tile_array = function (wordlist) {
-    let shuffled = Memory.shuffle(
-        R.chain((x) => [x, x], wordlist)
-    );
+    const doubled_wordlist = R.chain(duplicate_tile, wordlist);
+    let shuffled = Memory.shuffle(doubled_wordlist);
 
     while (has_adjacent_duplicates(shuffled)) {
-        shuffled = Memory.shuffle(
-            R.chain((x) => [x, x], wordlist)
-        );
+        shuffled = Memory.shuffle(doubled_wordlist);
     }
 
     return shuffled;
 };
 
+/**
+ * Create duplicate pair for requested tile
+ * @private
+ * @param {string} tile - the tile name
+ * @returns {string[]} Two copies of the tile name
+ */
+const duplicate_tile = function (tile) {
+    return [tile, tile];
+};
+
+/**
+ * Checks whether array contain neighbouring duplicate tiles
+ * @private
+ * @param {string[]} array - array to check
+ * @returns {boolean} True if any neighbouring values are the same
+ */
 const has_adjacent_duplicates = function (array) {
     return array.some(function (tile, index) {
         return index > 0 && tile === array[index - 1];
@@ -89,7 +119,7 @@ const has_adjacent_duplicates = function (array) {
  * @param {string[]} array - List
  * @returns {string[]} A shuffled list
  */
-Memory.shuffle = function (array){
+Memory.shuffle = function (array) {
     return R.sortBy(() => Math.random(), array);
 };
 
@@ -98,14 +128,14 @@ Memory.shuffle = function (array){
  * @memberof Memory
  * @function
  * @param {number} player_pointer - index of the current player
- * @param {string[]} walking_tile - Shuffled array of walking tiles
+ * @param {string[]} walking_tiles - Shuffled array of walking tiles
  * @returns {string} The value of the forward tile
  */
-Memory.get_forward_tile = function (player_pointer, walking_tiles){
+Memory.get_forward_tile = function (player_pointer, walking_tiles) {
     let forward_tile = player_pointer + 1;
     if (forward_tile >= walking_tiles.length) {
         forward_tile = 0;
-    } 
+    }
     return walking_tiles[forward_tile];
 };
 
@@ -114,12 +144,12 @@ Memory.get_forward_tile = function (player_pointer, walking_tiles){
  * @memberof Memory
  * @function
  * @param {number} player_pointer - current player index position
- * @param {string[]} walking_tile - Shuffled array of walking_tiles
+ * @param {string[]} walking_tiles - Shuffled array of walking_tiles
  * @returns {number} updated index position of current player
  */
-Memory.update_pointer = function(player_pointer, walking_tile) {
+Memory.update_pointer = function (player_pointer, walking_tiles) {
     player_pointer += 1;
-    if (player_pointer >= walking_tile.length){
+    if (player_pointer >= walking_tiles.length) {
         player_pointer = 0;
     }
     return player_pointer;
@@ -131,13 +161,18 @@ Memory.update_pointer = function(player_pointer, walking_tile) {
  * @function
  * @param {number} picked - index of the picked tile
  * @param {number} player_pointer - current player index position
- * @param {string[]} walking_tile - Shuffled array of walking_tiles
- * @param {string[]} matching_tile - - Shuffled array of matching_tiles
+ * @param {string[]} walking_tiles - Shuffled array of walking_tiles
+ * @param {string[]} matching_tiles - Shuffled array of matching_tiles
  * @returns {boolean} Returns true if matches, false if not match
  */
-Memory.matching = function (picked, player_pointer, walking_tile, matching_tile) {
-    const forward_tile = Memory.get_forward_tile(player_pointer, walking_tile);
-    const picked_tile = matching_tile.flat()[picked];
+Memory.matching = function (
+    picked,
+    player_pointer,
+    walking_tiles,
+    matching_tiles
+) {
+    const forward_tile = Memory.get_forward_tile(player_pointer, walking_tiles);
+    const picked_tile = R.flatten(matching_tiles)[picked];
     return forward_tile === picked_tile;
 };
 
@@ -147,16 +182,17 @@ Memory.matching = function (picked, player_pointer, walking_tile, matching_tile)
  * @function
  * @param {number} current_player_pointer - index position of current player
  * @param {number} other_player_pointer - index position of opposing player
- * @param {string[]} walking_tile - Shuffled array of walking_tiles
- * @returns {Boolean} Returns true if game won
+ * @param {string[]} walking_tiles - Shuffled array of walking_tiles
+ * @returns {boolean} Returns true if game won
  */
 Memory.win_condition = function (
     current_player_pointer,
     other_player_pointer,
-    walking_tile
+    walking_tiles
 ) {
-    const other_forward_pointer =
-        (other_player_pointer + 1) % walking_tile.length;
+    const other_forward_pointer = (
+        other_player_pointer + 1
+    ) % walking_tiles.length;
 
     return current_player_pointer === other_forward_pointer;
 };
@@ -165,7 +201,7 @@ Memory.win_condition = function (
  * Reset game by creating a new game object
  * @memberof Memory
  * @function
- * @returns {object} - new instance of the intial game state
+ * @returns {Game} - A new instance of the initial game state
  */
 Memory.reset_game = function () {
     return Memory.create_game();
@@ -175,7 +211,7 @@ Memory.reset_game = function () {
  * End player current turn
  * @memberof Memory
  * @function
- * @param {} current_player - index of current player
+ * @param {number} current_player - The current player is either 0 or 1.
  * @returns {number} player 1 or player 2 index position
  */
 Memory.switch_player = function (current_player) {
@@ -190,29 +226,36 @@ Memory.switch_player = function (current_player) {
  * Move current player ahead by 1
  * @memberof Memory
  * @function
- * @param {object} game - current game state
+ * @param {Game} game - current game state
  * @param {string[][]} game.matching_tiles - The matching tile grid.
  * @param {string[]} game.walking_tiles - The walking board tiles.
  * @param {number} game.current_player - Index of the current player.
  * @param {number[]} game.player_pointers - Current positions of both players.
- * @returns {object} - update game to move player forward
+ * @returns {Game} - update game to move player forward
  */
-//move_current_player
-Memory.move_current_player = function (game){
-    const current_pointer =
-    game.player_pointers[game.current_player];
+Memory.move_current_player = function (game) {
+    const current_player = game.current_player;
+    const player_pointers = game.player_pointers.slice();
 
-    game.player_pointers[game.current_player]=
-    Memory.update_pointer(current_pointer, game.walking_tiles);
+    player_pointers[current_player] = Memory.update_pointer(
+        game.player_pointers[current_player],
+        game.walking_tiles
+    );
 
-    return game;
+    return Object.assign(
+        {},
+        game,
+        {
+            player_pointers: player_pointers
+        }
+    );
 };
 
 /**
  * Checks whether the current player in the game has won
  * @memberof Memory
  * @function
- * @param {object} game - current game state
+ * @param {Game} game - current game state
  * @param {string[][]} game.matching_tiles - The matching tile grid.
  * @param {string[]} game.walking_tiles - The walking board tiles.
  * @param {number} game.current_player - Index of the current player.
@@ -220,20 +263,21 @@ Memory.move_current_player = function (game){
  * @returns {boolean} - either win (true) or not
  */
 Memory.check_player_won = function (game) {
-    const current_player_pointer =
-    game.player_pointers[game.current_player];
+    const current_player_pointer = game.player_pointers[
+        game.current_player
+    ];
 
-    const other_player =
-    Memory.switch_player(game.current_player);
+    const other_player = Memory.switch_player(game.current_player);
 
-    const other_player_pointer =
-    game.player_pointers[other_player];
+    const other_player_pointer = game.player_pointers[
+        other_player
+    ];
 
     return Memory.win_condition(
         current_player_pointer,
         other_player_pointer,
         game.walking_tiles
-   );
+    );
 };
 
 /**
@@ -241,28 +285,29 @@ Memory.check_player_won = function (game) {
  * Checking if the picked matching tile matches with walking_tile ahead
  * If yes, current player moves forward and checks if they have won.
  * If no, the turn switches to other player
+ * Special Case: If both players started on the same tile,
+ * behind player moving forward from that tile does not count as a win.
  * @memberof Memory
  * @function
- * @param {object} game - current game state
+ * @param {Game} game - current game state
  * @param {string[][]} game.matching_tiles - The matching tile grid.
  * @param {string[]} game.walking_tiles - The walking board tiles.
  * @param {number} game.current_player - Index of the current player.
  * @param {number[]} game.player_pointers - Current positions of both players.
  * @param {number} picked - index position of picked matching tile
- * @returns {object} Result of the turn.
- * @returns {Object} return.game - Updated game state.
- * @returns {boolean} return.matched - True if the picked tile matched the forward tile.
- * @returns {boolean} return.won - True if the current player won after this turn.
+ * @returns {TurnResult} Result of the turn.
+ * @returns {Game} return.game - Updated game state.
+ * @returns {boolean} return.matched - True if the picked tile matched
+ * the forward tile.
+ * @returns {boolean} return.won - True if the current player
+ * won after this turn.
  */
 Memory.play_turn = function (game, picked) {
-    const current_pointer =
-        game.player_pointers[game.current_player];
+    const current_pointer = game.player_pointers[game.current_player];
 
-    const other_player =
-        Memory.switch_player(game.current_player);
+    const other_player = Memory.switch_player(game.current_player);
 
-    const other_pointer =
-        game.player_pointers[other_player];
+    const other_pointer = game.player_pointers[other_player];
 
     if (
         Memory.matching(
@@ -272,25 +317,28 @@ Memory.play_turn = function (game, picked) {
             game.matching_tiles
         )
     ) {
-        const players_started_same_tile =
-            current_pointer === other_pointer;
+        const players_started_same_tile = current_pointer === other_pointer;
 
-        game = Memory.move_current_player(game);
+        const updated_game = Memory.move_current_player(game);
 
         return {
-            game: game,
+            game: updated_game,
             matched: true,
             won: (
                 !players_started_same_tile &&
-                Memory.check_player_won(game)
+                Memory.check_player_won(updated_game)
             )
         };
     }
 
-    game.current_player = Memory.switch_player(game.current_player);
-
     return {
-        game: game,
+        game: Object.assign(
+            {},
+            game,
+            {
+                current_player: Memory.switch_player(game.current_player)
+            }
+        ),
         matched: false,
         won: false
     };

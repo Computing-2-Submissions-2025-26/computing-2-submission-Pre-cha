@@ -116,8 +116,11 @@ const redraw_walking_board = function () {
 
         tile_div.className = "walking_tile";
 
-        const forward_index = (game.player_pointers[game.current_player] + 1)
-         % game.walking_tiles.length;
+        const forward_index = (
+            game.player_pointers[game.current_player] + 1
+        ) % (
+            game.walking_tiles.length
+        );
 
         if (index === forward_index) {
             if (game.current_player === 0) {
