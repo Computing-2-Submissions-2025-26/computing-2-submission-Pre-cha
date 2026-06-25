@@ -4,7 +4,8 @@
     },
     "source": {
         "include": [
-            "web-app/Memory.js"
+            "web-app/Memory.js",
+            "web-app/Stats.js"
         ],
         "includePattern": "\\.js$",
         "excludePattern": "(node_modules/|docs)"
