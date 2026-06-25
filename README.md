@@ -39,7 +39,8 @@ for course work submission [Computing2:Applications]
 ## FUTURE IMPROVEMENTS
 - Increase to selectable 2-4 players (Alters spacing)
 
- 
+ ## Accessibility
+ Accessibility has been checked with the built-in tool on FireFox Developers
 
 It defines a module
 `web-app/Memory.js`,

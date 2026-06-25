@@ -124,6 +124,20 @@ Memory.shuffle = function (array) {
 };
 
 /**
+ * Returns the index of the tile in front of a player.
+ * @memberof Memory
+ * @function
+ * @param {number} player_pointer The player's current walking track index.
+ * @param {string[]} walking_tiles The walking track.
+ * @returns {number} The index of the tile ahead of the player.
+ */
+Memory.get_forward_index = function (player_pointer, walking_tiles) {
+    return (
+        player_pointer + 1
+    ) % walking_tiles.length;
+};
+
+/**
  * Returns the value of the tile is in front the current player.
  * @memberof Memory
  * @function
@@ -132,11 +146,9 @@ Memory.shuffle = function (array) {
  * @returns {string} The value of the forward tile
  */
 Memory.get_forward_tile = function (player_pointer, walking_tiles) {
-    let forward_tile = player_pointer + 1;
-    if (forward_tile >= walking_tiles.length) {
-        forward_tile = 0;
-    }
-    return walking_tiles[forward_tile];
+    return walking_tiles[
+        Memory.get_forward_index(player_pointer, walking_tiles)
+    ];
 };
 
 /**

@@ -116,10 +116,9 @@ const redraw_walking_board = function () {
 
         tile_div.className = "walking_tile";
 
-        const forward_index = (
-            game.player_pointers[game.current_player] + 1
-        ) % (
-            game.walking_tiles.length
+        const forward_index = Memory.get_forward_index(
+            game.player_pointers[game.current_player],
+            game.walking_tiles
         );
 
         if (index === forward_index) {
@@ -180,11 +179,12 @@ const draw_matching_board = function () {
 
     game.matching_tiles.flat().forEach(function (tile, index) {
         const tile_button = document.createElement("button");
-
+        tile_button.type = "button";
         tile_button.className = "matching_tile";
         tile_button.textContent = "?";
 
         tile_button.onclick = function () {
+            start_music();
             if (game_over) {
                 return;
             }
@@ -234,14 +234,13 @@ const draw_matching_board = function () {
     });
 };
 
-//Start Background Music on First Interaction
-document.body.onclick = function () {
+//Start Background Music
+const start_music = function () {
     if (!music_started) {
         background_music.volume = 0.5;
 
         background_music.play().then(function () {
             music_started = true;
-            console.log("Music started");
         }).catch(function (error) {
             console.log("Music error:", error);
         });
@@ -251,6 +250,7 @@ document.body.onclick = function () {
 
 // The reset button resets the entire game state.
 reset_button.onclick = function () {
+    start_music();
     play_sound(button_sound);
     console.log("reset clicked");
     game_over = false;
@@ -265,7 +265,7 @@ reset_button.onclick = function () {
     animate_matching_shuffle();
 };
 
-//Intial Page Setup
+//Initial Page Setup
 redraw_walking_board();
 draw_matching_board();
 redraw_sidebar();

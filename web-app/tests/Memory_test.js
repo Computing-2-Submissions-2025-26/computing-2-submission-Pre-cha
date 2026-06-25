@@ -1,7 +1,6 @@
 /*jslint long, node*/
 
 import Memory from "../Memory.js";
-import R from "../ramda.js";
 
 const display_game = function (game) {
     return "\n" + JSON.stringify(game, null, 4);
@@ -29,14 +28,6 @@ const test_game = function () {
 
 const clone_game = function (game) {
     return JSON.parse(JSON.stringify(game));
-};
-
-const matching_tiles_as_list = function (matching_tiles) {
-    return R.flatten(matching_tiles);
-};
-
-const same_tiles = function (list_1, list_2) {
-    return JSON.stringify(list_1.slice().sort()) === JSON.stringify(list_2.slice().sort());
 };
 
 const expected_next_pointer = function (pointer, walking_tiles) {
@@ -389,22 +380,28 @@ describe("Winning", function () {
     });
 
     it(
-        "play_turn does not let a player win after starting on the same tile as the other player", function () {
-    const game = test_game();
+        "play_turn does not let a player win after starting on the same tile",
+        function () {
+            const game = test_game();
 
-    game.player_pointers = [6, 6];
-    game.current_player = 0;
+            game.player_pointers = [6, 6];
+            game.current_player = 0;
 
-    const result = Memory.play_turn(game, 7);
+            const result = Memory.play_turn(game, 7);
 
-    throw_if_invalid_turn_result(result);
+            throw_if_invalid_turn_result(result);
 
-    if (!result.matched) {
-        throw new Error("Player 0 should have matched the forward tile.");
-    }
+            if (!result.matched) {
+                throw new Error(
+                    "Player 0 should have matched the forward tile."
+                );
+            }
 
-    if (result.won) {
-        throw new Error("Player 0 should not win after starting on the same tile as player 1.");
-    }
-    });
+            if (result.won) {
+                throw new Error(
+                    "Player 0 should not win after starting on the same tile as player 1."
+                );
+            }
+        }
+    );
 });
