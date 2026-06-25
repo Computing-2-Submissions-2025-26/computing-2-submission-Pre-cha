@@ -1,3 +1,3 @@
 {
-    "spec": "./**/tests/*Memory.test.js"
+    "spec": "./**/tests/*memory.test.js"
 }
