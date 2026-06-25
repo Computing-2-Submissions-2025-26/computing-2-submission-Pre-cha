@@ -38,6 +38,7 @@ for course work submission [Computing2:Applications]
 
 ## FUTURE IMPROVEMENTS
 - Increase to selectable 2-4 players (by alters spacing)
+- Improve the current player position icon (currently represented by 🟦1 and 🟥2)
 
  ## Accessibility
  Accessibility has been checked with the built-in tool on FireFox Developers with 0 flagged errors
@@ -55,6 +56,7 @@ for tracking current game board statistics
 
 A set of unit tests are written for this module,
 `web-app/test/Memory_test.js`
+- Unit tests has been checked to purposely failed by temporarily altering the Memory.js of said tested function
 
 A front-end application is written to wrap the game module in a browser based web app
 `web-app/`
