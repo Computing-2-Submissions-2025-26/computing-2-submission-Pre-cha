@@ -1,6 +1,9 @@
+/*jslint browser, devel, unordered*/
+/*global describe, it*/
 import Memory from "../Memory.js";
 import Stats from "../Stats.js";
 import R from "../ramda.js";
+
 
 const display_game = function (game) {
     return "\n" + JSON.stringify(game, null, 4);

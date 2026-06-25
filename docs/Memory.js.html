@@ -29,7 +29,7 @@
 <nav >
     
     
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Memory.html">Memory</a><ul class='methods'><li data-type='method'><a href="Memory.html#.create_game">create_game</a></li><li data-type='method'><a href="Memory.html#.get_forward_tile">get_forward_tile</a></li><li data-type='method'><a href="Memory.html#.matching">matching</a></li><li data-type='method'><a href="Memory.html#.matching_tile_array">matching_tile_array</a></li><li data-type='method'><a href="Memory.html#.reset_game">reset_game</a></li><li data-type='method'><a href="Memory.html#.shuffle">shuffle</a></li><li data-type='method'><a href="Memory.html#.update_pointer">update_pointer</a></li><li data-type='method'><a href="Memory.html#.walking_tile_array">walking_tile_array</a></li><li data-type='method'><a href="Memory.html#.win_condition">win_condition</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#wordlist">wordlist</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Memory.html">Memory</a><ul class='methods'><li data-type='method'><a href="Memory.html#.check_player_won">check_player_won</a></li><li data-type='method'><a href="Memory.html#.create_game">create_game</a></li><li data-type='method'><a href="Memory.html#.get_forward_tile">get_forward_tile</a></li><li data-type='method'><a href="Memory.html#.matching">matching</a></li><li data-type='method'><a href="Memory.html#.matching_tile_array">matching_tile_array</a></li><li data-type='method'><a href="Memory.html#.move_current_player">move_current_player</a></li><li data-type='method'><a href="Memory.html#.play_turn">play_turn</a></li><li data-type='method'><a href="Memory.html#.reset_game">reset_game</a></li><li data-type='method'><a href="Memory.html#.shuffle">shuffle</a></li><li data-type='method'><a href="Memory.html#.switch_player">switch_player</a></li><li data-type='method'><a href="Memory.html#.update_pointer">update_pointer</a></li><li data-type='method'><a href="Memory.html#.walking_tile_array">walking_tile_array</a></li><li data-type='method'><a href="Memory.html#.win_condition">win_condition</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#wordlist">wordlist</a></li></ul>
     
 </nav>
 
@@ -219,8 +219,129 @@ Memory.reset_game = function () {
 };
 
 /**
- * 
+ * End player current turn
+ * @memberof Memory
+ * @function
+ * @param {} current_player - index of current player
+ * @returns {number} player 1 or player 2 index position
  */
+Memory.switch_player = function (current_player) {
+    return (
+        current_player === 0
+        ? 1
+        : 0
+    );
+};
+
+/**
+ * Move current player ahead by 1
+ * @memberof Memory
+ * @function
+ * @param {object} game - current game state
+ * @param {string[][]} game.matching_tiles - The matching tile grid.
+ * @param {string[]} game.walking_tiles - The walking board tiles.
+ * @param {number} game.current_player - Index of the current player.
+ * @param {number[]} game.player_pointers - Current positions of both players.
+ * @returns {object} - update game to move player forward
+ */
+//move_current_player
+Memory.move_current_player = function (game){
+    const current_pointer =
+    game.player_pointers[game.current_player];
+
+    game.player_pointers[game.current_player]=
+    Memory.update_pointer(current_pointer, game.walking_tiles);
+
+    return game;
+};
+
+/**
+ * Checks whether the current player in the game has won
+ * @memberof Memory
+ * @function
+ * @param {object} game - current game state
+ * @param {string[][]} game.matching_tiles - The matching tile grid.
+ * @param {string[]} game.walking_tiles - The walking board tiles.
+ * @param {number} game.current_player - Index of the current player.
+ * @param {number[]} game.player_pointers - Current positions of both players.
+ * @returns {boolean} - either win (true) or not
+ */
+Memory.check_player_won = function (game) {
+    const current_player_pointer =
+    game.player_pointers[game.current_player];
+
+    const other_player =
+    Memory.switch_player(game.current_player);
+
+    const other_player_pointer =
+    game.player_pointers[other_player];
+
+    return Memory.win_condition(
+        current_player_pointer,
+        other_player_pointer,
+        game.walking_tiles
+   );
+};
+
+/**
+ * Play a single turn by
+ * Checking if the picked matching tile matches with walking_tile ahead
+ * If yes, current player moves forward and checks if they have won.
+ * If no, the turn switches to other player
+ * @memberof Memory
+ * @function
+ * @param {object} game - current game state
+ * @param {string[][]} game.matching_tiles - The matching tile grid.
+ * @param {string[]} game.walking_tiles - The walking board tiles.
+ * @param {number} game.current_player - Index of the current player.
+ * @param {number[]} game.player_pointers - Current positions of both players.
+ * @param {number} picked - index position of picked matching tile
+ * @returns {object} Result of the turn.
+ * @returns {Object} return.game - Updated game state.
+ * @returns {boolean} return.matched - True if the picked tile matched the forward tile.
+ * @returns {boolean} return.won - True if the current player won after this turn.
+ */
+Memory.play_turn = function (game, picked) {
+    const current_pointer =
+        game.player_pointers[game.current_player];
+
+    const other_player =
+        Memory.switch_player(game.current_player);
+
+    const other_pointer =
+        game.player_pointers[other_player];
+
+    if (
+        Memory.matching(
+            picked,
+            current_pointer,
+            game.walking_tiles,
+            game.matching_tiles
+        )
+    ) {
+        const players_started_same_tile =
+            current_pointer === other_pointer;
+
+        game = Memory.move_current_player(game);
+
+        return {
+            game: game,
+            matched: true,
+            won: (
+                !players_started_same_tile &amp;&amp;
+                Memory.check_player_won(game)
+            )
+        };
+    }
+
+    game.current_player = Memory.switch_player(game.current_player);
+
+    return {
+        game: game,
+        matched: false,
+        won: false
+    };
+};
 
 export default Object.freeze(Memory);</code></pre>
         </article>
@@ -236,7 +357,7 @@ export default Object.freeze(Memory);</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Thu Jun 11 2026 15:38:00 GMT+0100 (British Summer Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Wed Jun 24 2026 23:32:39 GMT+0100 (British Summer Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

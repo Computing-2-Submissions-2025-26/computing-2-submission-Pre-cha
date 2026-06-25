@@ -1,4 +1,4 @@
-<!doctype html>  <!-- This first line tells browsers to expect modern standard html 5 -->
+<!doctype html> <!-- This first line tells browsers to expect modern standard html 5 -->
 <html lang="en-gb"> <!-- This is indicates the page is written in British English, useful for accessibility -->
 <head>
     <meta charset="utf-8"> <!-- This indicates how the file is encoded. utf-8 is standard -->
@@ -9,38 +9,55 @@
 </head>
 <body>
     <aside id="sidebar">
-        <h1>Pinic Panic</h1>
-        <h2>Instructions:</h2>
-        <p>
-            Find the matching tile in front of you
-            to move forward. Overtake the other
-            player to win! You're moving
-            clockwise around the board.
-            Peer Review: Go find a friend
-            to play this with please.
-        </p>
+        <div id="title_logo">
+            <h1>Pinic Panic</h1>
+            <img src="./assets/pinic_logo.png" alt="Picnic Panic logo">
+        </div>
 
-        <h3>Current Turn</h3>
-        <p id="current_turn"></p>
+        <section id="instructions_panel">
+            <h2>Instructions:</h2>
+            <p>
+                Fiona and Carl are racing to see who
+                can eat their way around the table first!
+            </p>
+            <p>
+                Match the correct tile to the tile in front
+                of you to move forward. Overtake the other to win.
+            </p>
+        </section>
 
-        <h4>Stats</h4>
-        <p id="blue_streak"></p>
-        <p id="red_streak"></p>
-        <p id="player1_wins"></p>
-        <p id="player2_wins"></p>
+        <section id="info_columns">
+            <section id="turn_panel">
+                <h3>Current Turn</h3>
 
-        <img
-            id="current_player_drawing"
-            src="./assets/blue_girl.png"
-            alt="Current player"
-        >
+                <div id="turn_content">
+                    <div id="current_player_avatar">
+                        <img
+                            id="current_player_drawing"
+                            src="./assets/blue_girl.png"
+                            alt="Current player"
+                        >
+                    </div>
 
-        <p id="looking_for"></p>
+                    <p id="current_turn"></p>
+                </div>
+            </section>
+
+            <section id="stats_panel">
+                <h3>Stats</h3>
+                <p id="blue_streak"></p>
+                <p id="red_streak"></p>
+                <p id="player1_wins"></p>
+                <p id="player2_wins"></p>
+                <p id="best_streak"></p>
+            </section>
+        </section>
     </aside>
 
     <main>
         <div id="game-area">
             <div id="walking-board"></div>
+
             <section id="centre-board">
                 <div id="matching-board"></div>
                 <button id="reset">Reset</button>
@@ -50,6 +67,10 @@
     </main>
 
     <audio id="background_music" src="./assets/bg_music.mp3" loop></audio>
+    <audio id="correct_sound" src="./assets/correct_sound.mp3"></audio>
+    <audio id="wrong_sound" src="./assets/wrong_sound.mp3"></audio>
+    <audio id="winner_sound" src="./assets/winner_sound.mp3"></audio>
+    <audio id="button_sound" src="./assets/button_sound.mp3"></audio>
 
     <div id="winner_popup" class="hidden">
         <div id="winner_box">

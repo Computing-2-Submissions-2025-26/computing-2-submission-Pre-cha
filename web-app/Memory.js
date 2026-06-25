@@ -39,7 +39,7 @@ Memory.create_game = function () {
         matching_tiles: Memory.matching_tile_array(wordlist),
         walking_tiles: Memory.walking_tile_array(wordlist),
         current_player: 0,
-        player_pointers: [0, 2]
+        player_pointers: [0, 12]
     };
 };
 
@@ -256,22 +256,37 @@ Memory.check_player_won = function (game) {
  */
 Memory.play_turn = function (game, picked) {
     const current_pointer =
-    game.player_pointers[game.current_player];
+        game.player_pointers[game.current_player];
 
-    if (Memory.matching(
-        picked,
-        current_pointer,
-        game.walking_tiles,
-        game.matching_tiles)
-    ){
-    game = Memory.move_current_player(game);
+    const other_player =
+        Memory.switch_player(game.current_player);
 
-    return {
-        game: game,
-        matched: true,
-        won: Memory.check_player_won(game)
-    };
-}
+    const other_pointer =
+        game.player_pointers[other_player];
+
+    if (
+        Memory.matching(
+            picked,
+            current_pointer,
+            game.walking_tiles,
+            game.matching_tiles
+        )
+    ) {
+        const players_started_same_tile =
+            current_pointer === other_pointer;
+
+        game = Memory.move_current_player(game);
+
+        return {
+            game: game,
+            matched: true,
+            won: (
+                !players_started_same_tile &&
+                Memory.check_player_won(game)
+            )
+        };
+    }
+
     game.current_player = Memory.switch_player(game.current_player);
 
     return {
@@ -279,7 +294,6 @@ Memory.play_turn = function (game, picked) {
         matched: false,
         won: false
     };
-
 };
 
 export default Object.freeze(Memory);

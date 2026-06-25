@@ -17,6 +17,8 @@ Stats.create_stats = function () {
     return {
         blue_streak: 0,
         red_streak: 0,
+        best_streak: 0,
+        best_streak_player: 0,
         wins: [0, 0]
     };
 };
@@ -35,8 +37,16 @@ Stats.update_streak = function (stats, result, current_player) {
     if (result.matched) {
         if (current_player === 0) {
             stats.blue_streak += 1;
+            if (stats.blue_streak > stats.best_streak) {
+                stats.best_streak = stats.blue_streak;
+                stats.best_streak_player = 0;
+            }
         } else {
             stats.red_streak += 1;
+            if (stats.red_streak > stats.best_streak) {
+                stats.best_streak = stats.red_streak;
+                stats.best_streak_player = 1;
+            }
         }
     } else {
         stats = Stats.reset_streak(stats, current_player);
@@ -63,6 +73,20 @@ Stats.reset_streak = function (stats, current_player) {
     } else {
         stats.red_streak = 0;
     }
+
+    return stats;
+};
+
+/**
+ * Resets both players' streaks without resetting win counts.
+ * @memberof Stats
+ * @function
+ * @param {Object} stats - Current stats.
+ * @returns {Object} Updated stats.
+ */
+Stats.reset_all_streaks = function (stats) {
+    stats.blue_streak = 0;
+    stats.red_streak = 0;
 
     return stats;
 };
